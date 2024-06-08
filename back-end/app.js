@@ -1,28 +1,30 @@
-const express = require("express");
-const app = express();
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+//Importing Required Modules:
+const express = require("express"); // A web framework for Node.js that helps in building web applications and APIs.
+const app = express(); // An instance of an Express application.
+const mongoose = require('mongoose'); // An Object Data Modeling (ODM) library for MongoDB and Node.js.
+const dotenv = require('dotenv'); // A module that loads environment variables from a .env file into process.env.
 
-//import routes
+// Importing Routes
 const userRoutes = require('./routes/user');
 
-dotenv.config();
+// Configuring Environment Variables
+dotenv.config(); // Loads the environment variables from a .env file into process.env.
 
 
-//db connection
-mongoose.connect(
-    process.env.MONGO_URI,
+// Database Connection
+mongoose.connect(process.env.MONGO_URI,
     {useNewUrlParser: true}
-  )
-.then(() => console.log('DB Connected'))
+  ) // Connects to a MongoDB database using the connection string stored in the MONGO_URI environment variable.
+.then(() => console.log('DB Connected')); //Logs a success message if the connection is successful.
    
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
-});
+}); // Logs an error message if there is an issue with the database connection.
 
-//routes middle we
-app.use(userRoutes);
+// Middleware to Use Routes
+app.use("/api", userRoutes);
 
+// Starting the Server
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
