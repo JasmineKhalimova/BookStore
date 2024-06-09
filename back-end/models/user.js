@@ -32,12 +32,11 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: []
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
-// Virtual field
 userSchema.virtual('password').set(function(password) {
     this._password = password;
-    this.salt = uuidv4(); // Use uuidv4 to generate a unique salt
+    this.salt = uuidv4();
     this.hashed_password = this.encryptPassword(password);
 }).get(function() {
     return this._password;
