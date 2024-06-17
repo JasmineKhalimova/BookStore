@@ -21,33 +21,47 @@ exports.signup = async (req, res) => {
 };
 
 // sign-in method
-exports.signin = (req,res) => {
+exports.signin = async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      // Find the user by email using async/await with findOne
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found. Please create account!",
+        });
+      }
+  
+      // User authentication
+      if (!user.authenticate(password)) {
+        return res.status(401).json({
+          error: "Email and password don't match",
+        });
+      }
+  
+      // Generate a signed token
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  
+      // Persist the token in a cookie
+      res.cookie("t", token, { expire: new Date() + 9999 });
+  
+      // Return response with user and token
+      const { _id, name, email: userEmail, role } = user; // Use userEmail to avoid naming conflict
+  
+      return res.json({ token, user: { _id, name, userEmail, role } });
+    } catch (err) {
+      // Handle errors appropriately, like logging or sending a generic error message
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
 
-    const {email, password} = req.body;
-    
-    User.findOne({ email }, (err, user) => {
-        if(err || !user) {
-            return res.status(400).json({
-                error: "User not found. Please create account!"
-            });
-        }
-        
-        //user authentication method
-        if(!user.authenticate(password)){
-            return res.status(401).json({
-                error: "Email and password does not match"
-            });
-        }
-        
-        //generate a signed token with use id and secrect
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+  //signout method
+  exports.signout = (req, res) => {
+    res.clearCookie("t");
+    res.json({message:"Signout success"});
+  }
 
-        //persist the token as 't' in cookie with expiry date
-        res.cookie('t', token, {expire: new Date() + 9999});
-
-        //return response with user and token to frontent client
-        const {_id, name, email, role} = user;
-
-        return res.json({token, user: {_id, emai, name, role}});
-    });
-};
+  // protecting routes
