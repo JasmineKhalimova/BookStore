@@ -69,3 +69,25 @@ exports.requireSignin = (req, res, next) => {
         next();
     });
 };
+
+// storefront user authentication
+exports.isAuth = (req, res, next) => {
+    let user = req.profile && req.auth && req.profile._id == req.auth_id;
+
+    if(!user){
+        return res.status(400).json({
+            error: "Access denied"
+        });
+    }
+    next();
+};
+
+// admin user authentication
+exports.isAdmin = (req, res, next) => {
+    if(req.profile.role === 0){
+        return res.status(403).json({
+            error: "admin access denied"
+        });
+    }
+    next();
+};
