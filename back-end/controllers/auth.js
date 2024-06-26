@@ -1,7 +1,7 @@
 const User = require('../models/user');
-const { errorHandler } = require('../helpers/dbErrorHandler');
 const jwt = require("jsonwebtoken"); // to generate signed in token
 const { expressjwt } = require("express-jwt"); // for authorization check
+const { errorHandler } = require('../helpers/dbErrorHandler');
 
 exports.signup = async (req, res) => {
     const user = new User(req.body);
@@ -72,11 +72,10 @@ exports.requireSignin = (req, res, next) => {
 
 // storefront user authentication
 exports.isAuth = (req, res, next) => {
-    let user = req.profile && req.auth && req.profile._id == req.auth_id;
-
-    if(!user){
-        return res.status(400).json({
-            error: "Access denied"
+    let user = req.profile && req.auth && req.profile._id == req.auth._id;
+    if (!user) {
+        return res.status(403).json({
+            error: 'Access denied'
         });
     }
     next();
@@ -84,9 +83,9 @@ exports.isAuth = (req, res, next) => {
 
 // admin user authentication
 exports.isAdmin = (req, res, next) => {
-    if(req.profile.role === 0){
+    if (req.profile.role === 0) {
         return res.status(403).json({
-            error: "admin access denied"
+            error: 'Admin resourse! Access denied'
         });
     }
     next();

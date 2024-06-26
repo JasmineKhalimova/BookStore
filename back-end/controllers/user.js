@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { errorHandler } = require('../helpers/dbErrorHandler');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id).exec()
@@ -16,4 +17,10 @@ exports.userById = (req, res, next, id) => {
                 error: "User not found"
             });
         });
+};
+
+exports.read = (req, res) => {
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
+    return res.json(req.profile);
 };
