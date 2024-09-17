@@ -33,23 +33,43 @@ exports.create = async (req, res) => {
             });
         }
 
-        const { name, description, price, category, quantity, shipping } = fields;
+        // Extracting fields
+        let { name, description, price, category, quantity, shipping } = fields;
 
-        if (!name || !description || !price || !category || !quantity || !shipping) {
+        // Cast fields to their respective types
+        name = String(name);
+        description = String(description);
+        price = Number(price);
+        category = String(category);
+        quantity = Number(quantity);
+        shipping = shipping === 'true'; // Convert string 'true'/'false' to Boolean
+
+        // Validate required fields
+        if (!name || !description || !price || !category || !quantity || shipping === undefined) {
             return res.status(400).json({
                 error: 'All fields are required'
             });
         }
 
-        let product = new Product(fields);
+        // Create new product object with parsed fields
+        let product = new Product({ name, description, price, category, quantity, shipping });
 
+        // Check for photo upload
         if (files.photo) {
-            if (files.photo.size > 1000000) {
+            if (files.photo.size > 1000000) {  // Limit to 1MB
                 return res.status(400).json({
                     error: 'Image should be less than 1mb in size'
                 });
             }
-            product.photo.data = fs.readFileSync(files.photo.path);
+            
+            try {
+                product.photo.data = fs.readFileSync(files.photo.path);
+            } catch (err) {
+                console.error('File read error: ', err);
+                return res.status(400).json({
+                    error: 'Error reading image file'
+                });
+            }
             product.photo.contentType = files.photo.type;
         }
 
@@ -64,7 +84,6 @@ exports.create = async (req, res) => {
         }
     });
 };
-
 
 exports.remove = async (req, res) => {
     let product = req.product;
