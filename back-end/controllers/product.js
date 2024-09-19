@@ -136,7 +136,7 @@ exports.list = async (req, res) => {
     try {
         const order = req.query.order || 'asc';
         const sortBy = req.query.sortBy || '_id';
-        const limit = req.query.limit ? parseInt(req.query.limit) : 6;
+        const limit = req.query.limit ? parseInt(req.query.limit) : 1;
 
         const products = await Product.find()
             .select('-photo')
