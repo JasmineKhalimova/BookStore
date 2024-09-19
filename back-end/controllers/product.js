@@ -4,18 +4,17 @@ const fs = require('fs');
 const Product = require('../models/product');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
-exports.productById = (req, res, next, id) => {
-    Product.findById(id)
-        .populate('category')
-        .exec((err, product) => {
-            if (err || !product) {
-                return res.status(400).json({
-                    error: 'Product not found'
-                });
-            }
-            req.product = product;
-            next();
-        });
+exports.productById = async (req, res, next, id) => {
+    try {
+        const product = await Product.findById(id).populate('category').exec();
+        if (!product) {
+            return res.status(400).json({ error: 'Product not found' });
+        }
+        req.product = product;
+        next();
+    } catch (err) {
+        return res.status(400).json({ error: 'Product not found' });
+    }
 };
 
 exports.read = (req, res) => {
@@ -99,15 +98,12 @@ exports.remove = async (req, res) => {
     }
 };
 
-
 exports.update = async (req, res) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req, async (err, fields, files) => {
         if (err) {
-            return res.status(400).json({
-                error: 'Image could not be uploaded'
-            });
+            return res.status(400).json({ error: 'Image could not be uploaded' });
         }
 
         let product = req.product;
@@ -115,9 +111,7 @@ exports.update = async (req, res) => {
 
         if (files.photo) {
             if (files.photo.size > 1000000) {
-                return res.status(400).json({
-                    error: 'Image should be less than 1mb in size'
-                });
+                return res.status(400).json({ error: 'Image should be less than 1mb in size' });
             }
             product.photo.data = fs.readFileSync(files.photo.path);
             product.photo.contentType = files.photo.type;
@@ -127,9 +121,7 @@ exports.update = async (req, res) => {
             const result = await product.save();
             res.json(result);
         } catch (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
+            return res.status(400).json({ error: errorHandler(err) });
         }
     });
 };
@@ -140,58 +132,53 @@ exports.update = async (req, res) => {
  * by arrival = /products?sortBy=createdAt&order=desc&limit=4
  * if no params are sent, then all products are returned
  */
+exports.list = async (req, res) => {
+    try {
+        const order = req.query.order || 'asc';
+        const sortBy = req.query.sortBy || '_id';
+        const limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
-exports.list = (req, res) => {
-    let order = req.query.order ? req.query.order : 'asc';
-    let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+        const products = await Product.find()
+            .select('-photo')
+            .populate('category')
+            .sort([[sortBy, order]])
+            .limit(limit)
+            .exec();
 
-    Product.find()
-        .select('-photo')
-        .populate('category')
-        .sort([[sortBy, order]])
-        .limit(limit)
-        .exec((err, products) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Products not found'
-                });
-            }
-            res.json(products);
-        });
+        res.json(products);
+    } catch (err) {
+        res.status(400).json({ error: 'Products not found' });
+    }
 };
 
 /**
  * it will find the products based on the req product category
  * other products that has the same category, will be returned
  */
+exports.listRelated = async (req, res) => {
+    try {
+        const limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
-exports.listRelated = (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+        const products = await Product.find({ _id: { $ne: req.product }, category: req.product.category })
+            .limit(limit)
+            .populate('category', '_id name')
+            .exec();
 
-    Product.find({ _id: { $ne: req.product }, category: req.product.category })
-        .limit(limit)
-        .populate('category', '_id name')
-        .exec((err, products) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Products not found'
-                });
-            }
-            res.json(products);
-        });
+        res.json(products);
+    } catch (err) {
+        res.status(400).json({ error: 'Products not found' });
+    }
 };
 
-exports.listCategories = (req, res) => {
-    Product.distinct('category', {}, (err, categories) => {
-        if (err) {
-            return res.status(400).json({
-                error: 'Categories not found'
-            });
-        }
+exports.listCategories = async (req, res) => {
+    try {
+        const categories = await Product.distinct('category', {});
         res.json(categories);
-    });
+    } catch (err) {
+        res.status(400).json({ error: 'Categories not found' });
+    }
 };
+
 
 /**
  * list products by search
@@ -200,50 +187,41 @@ exports.listCategories = (req, res) => {
  * as the user clicks on those checkbox and radio buttons
  * we will make api request and show the products to users based on what he wants
  */
+exports.listBySearch = async (req, res) => {
+    try {
+        const order = req.body.order || 'desc';
+        const sortBy = req.body.sortBy || '_id';
+        const limit = req.body.limit ? parseInt(req.body.limit) : 100;
+        const skip = parseInt(req.body.skip);
+        let findArgs = {};
 
-exports.listBySearch = (req, res) => {
-    let order = req.body.order ? req.body.order : 'desc';
-    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
-    let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-    let skip = parseInt(req.body.skip);
-    let findArgs = {};
-
-    // console.log(order, sortBy, limit, skip, req.body.filters);
-    // console.log("findArgs", findArgs);
-
-    for (let key in req.body.filters) {
-        if (req.body.filters[key].length > 0) {
-            if (key === 'price') {
-                // gte -  greater than price [0-10]
-                // lte - less than
-                findArgs[key] = {
-                    $gte: req.body.filters[key][0],
-                    $lte: req.body.filters[key][1]
-                };
-            } else {
-                findArgs[key] = req.body.filters[key];
+        for (let key in req.body.filters) {
+            if (req.body.filters[key].length > 0) {
+                if (key === 'price') {
+                    findArgs[key] = {
+                        $gte: req.body.filters[key][0],
+                        $lte: req.body.filters[key][1]
+                    };
+                } else {
+                    findArgs[key] = req.body.filters[key];
+                }
             }
         }
-    }
 
-    Product.find(findArgs)
-        .select('-photo')
-        .populate('category')
-        .sort([[sortBy, order]])
-        .skip(skip)
-        .limit(limit)
-        .exec((err, data) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Products not found'
-                });
-            }
-            res.json({
-                size: data.length,
-                data
-            });
-        });
+        const data = await Product.find(findArgs)
+            .select('-photo')
+            .populate('category')
+            .sort([[sortBy, order]])
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        res.json({ size: data.length, data });
+    } catch (err) {
+        res.status(400).json({ error: 'Products not found' });
+    }
 };
+
 
 exports.photo = (req, res, next) => {
     if (req.product.photo.data) {
@@ -253,45 +231,36 @@ exports.photo = (req, res, next) => {
     next();
 };
 
-exports.listSearch = (req, res) => {
-    // create query object to hold search value and category value
+exports.listSearch = async (req, res) => {
     const query = {};
-    // assign search value to query.name
+
     if (req.query.search) {
         query.name = { $regex: req.query.search, $options: 'i' };
-        // assigne category value to query.category
-        if (req.query.category && req.query.category != 'All') {
+        if (req.query.category && req.query.category !== 'All') {
             query.category = req.query.category;
         }
-        // find the product based on query object with 2 properties
-        // search and category
-        Product.find(query, (err, products) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
+
+        try {
+            const products = await Product.find(query).select('-photo').exec();
             res.json(products);
-        }).select('-photo');
+        } catch (err) {
+            res.status(400).json({ error: errorHandler(err) });
+        }
     }
 };
 
-exports.decreaseQuantity = (req, res, next) => {
-    let bulkOps = req.body.order.products.map(item => {
-        return {
-            updateOne: {
-                filter: { _id: item._id },
-                update: { $inc: { quantity: -item.count, sold: +item.count } }
-            }
-        };
-    });
-
-    Product.bulkWrite(bulkOps, {}, (error, products) => {
-        if (error) {
-            return res.status(400).json({
-                error: 'Could not update product'
-            });
+exports.decreaseQuantity = async (req, res, next) => {
+    const bulkOps = req.body.order.products.map(item => ({
+        updateOne: {
+            filter: { _id: item._id },
+            update: { $inc: { quantity: -item.count, sold: +item.count } }
         }
+    }));
+
+    try {
+        await Product.bulkWrite(bulkOps, {});
         next();
-    });
+    } catch (error) {
+        res.status(400).json({ error: 'Could not update product' });
+    }
 };
