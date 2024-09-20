@@ -1,32 +1,43 @@
-//Importing Required Modules:
-const express = require("express"); // A web framework for Node.js that helps in building web applications and APIs.
-const app = express(); // An instance of an Express application.
-const mongoose = require('mongoose'); // An Object Data Modeling (ODM) library for MongoDB and Node.js.
-const dotenv = require('dotenv'); // A module that loads environment variables from a .env file into process.env.
+const express = require('express');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
-// Importing Routes
+require('dotenv').config();
+
+// routes
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const categoryRoutes = require('./routes/category');
+const productRoutes = require('./routes/product');
 
-// Configuring Environment Variables
-dotenv.config(); // Loads the environment variables from a .env file into process.env.
+const app = express();
 
+// DB connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('DB Connected'))
+    .catch(err => console.error('DB Connection Error:', err));
 
-// Database Connection
-mongoose.connect(process.env.MONGO_URI,
-    {useNewUrlParser: true}
-  ) // Connects to a MongoDB database using the connection string stored in the MONGO_URI environment variable.
-.then(() => console.log('DB Connected')); //Logs a success message if the connection is successful.
-   
-mongoose.connection.on('error', err => {
-    console.log(`DB connection error: ${err.message}`)
-}); // Logs an error message if there is an issue with the database connection.
+// Middleware
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors());
 
-// Middleware to Use Routes
-app.use("/api", userRoutes);
+app.use((req, res, next) => {
+    console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
+    next();
+});
 
-// Starting the Server
+app.use('/api', authRoutes);
+app.use('/api', userRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', productRoutes);
+
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
-    console.log(`server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
