@@ -1,22 +1,21 @@
 const User = require("../models/user");
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
-exports.userById = (req, res, next, id) => {
-    User.findById(id).exec()
-        .then(user => {
-            if (!user) {
-                return res.status(400).json({
-                    error: "User not found"
-                });
-            }
-            req.profile = user;
-            next();
-        })
-        .catch(err => {
+exports.userById = async (req, res, next, id) => {
+    try {
+        const user = await User.findById(id).exec();
+        if (!user) {
             return res.status(400).json({
                 error: "User not found"
             });
+        }
+        req.profile = user;
+        next();
+    } catch (err) {
+        return res.status(400).json({
+            error: "User not found"
         });
+    }
 };
 
 exports.read = (req, res) => {
@@ -25,16 +24,17 @@ exports.read = (req, res) => {
     return res.json(req.profile);
 };
 
-exports.update = (req, res) => {
-    // console.log('UPDATE USER - req.user', req.user, 'UPDATE DATA', req.body);
+exports.update = async (req, res) => {
     const { name, password } = req.body;
 
-    User.findOne({ _id: req.profile._id }, (err, user) => {
-        if (err || !user) {
+    try {
+        const user = await User.findOne({ _id: req.profile._id }).exec();
+        if (!user) {
             return res.status(400).json({
                 error: 'User not found'
             });
         }
+
         if (!name) {
             return res.status(400).json({
                 error: 'Name is required'
@@ -53,16 +53,16 @@ exports.update = (req, res) => {
             }
         }
 
-        user.save((err, updatedUser) => {
-            if (err) {
-                console.log('USER UPDATE ERROR', err);
-                return res.status(400).json({
-                    error: 'User update failed'
-                });
-            }
-            updatedUser.hashed_password = undefined;
-            updatedUser.salt = undefined;
-            res.json(updatedUser);
+        const updatedUser = await user.save();
+        updatedUser.hashed_password = undefined;
+        updatedUser.salt = undefined;
+        res.json(updatedUser);
+        
+    } catch (err) {
+        console.log('USER UPDATE ERROR', err);
+        return res.status(400).json({
+            error: 'User update failed'
         });
-    });
+    }
 };
+
