@@ -1,13 +1,5 @@
 import './styles/global.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>react appS</h1>
-      </header>
-    </div>
-  );
-}
+const App = () => <div>Hello from react</div>;
 
 export default App;
