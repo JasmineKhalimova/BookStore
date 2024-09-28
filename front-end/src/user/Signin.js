@@ -84,14 +84,14 @@ const Signin = () => {
     // Function to display an error message if there is an error in the state
     const showError = () => (
         <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>
-            {error} {/* Display the error message */}
+            {error}
         </div>
     );
 
     // Function to display a loading message while submitting the form
     const showLoading = () => (
         loading && <div className='alert alert-info'>
-            <h2>Loading...</h2> {/* Loading indicator */}
+            <h2>Loading...</h2>
         </div>
     );
 
@@ -130,5 +130,4 @@ const Signin = () => {
     );
 };
 
-// Export the Signin component
 export default Signin;
