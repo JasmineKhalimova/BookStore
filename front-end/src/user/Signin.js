@@ -111,7 +111,6 @@ const Signin = () => {
         }
     };
 
-    // Return the component layout and render different elements
     return (
         <Layout
             title="Signin"
