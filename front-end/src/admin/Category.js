@@ -82,10 +82,14 @@ const Category = () => {
             title="Category"
             description={`G'day ${user.name}, ready to add a new category?`}
         >
-            {showSuccess()}
-            {showError()}
-            {newCategoryFom()}
-            {goBack()}
+            <div className="row">
+                <div className="col-md-8 offset-md-2">
+                    {showSuccess()}
+                    {showError()}
+                    {newCategoryFom()}
+                    {goBack()}
+                </div>
+            </div>
         </Layout>
     );
 }
