@@ -18,7 +18,7 @@ exports.productById = async (req, res, next, id) => {
 };
 
 exports.read = (req, res) => {
-    req.product.photo = undefined;
+    req.product.image = undefined;
     return res.json(req.product);
 };
 
@@ -53,23 +53,23 @@ exports.create = async (req, res) => {
         // Create new product object with parsed fields
         let product = new Product({ name, description, price, category, quantity, shipping });
 
-        // Check for photo upload
-        if (files.photo) {
-            if (files.photo.size > 1000000) {  // Limit to 1MB
+        // Check for image upload
+        if (files.image) {
+            if (files.image.size > 1000000) {  // Limit to 1MB
                 return res.status(400).json({
                     error: 'Image should be less than 1mb in size'
                 });
             }
             
             try {
-                product.photo.data = fs.readFileSync(files.photo.path);
+                product.image.data = fs.readFileSync(files.image.path);
             } catch (err) {
                 console.error('File read error: ', err);
                 return res.status(400).json({
                     error: 'Error reading image file'
                 });
             }
-            product.photo.contentType = files.photo.type;
+            product.image.contentType = files.image.type;
         }
 
         try {
@@ -109,12 +109,12 @@ exports.update = async (req, res) => {
         let product = req.product;
         product = _.extend(product, fields);
 
-        if (files.photo) {
-            if (files.photo.size > 1000000) {
+        if (files.image) {
+            if (files.image.size > 1000000) {
                 return res.status(400).json({ error: 'Image should be less than 1mb in size' });
             }
-            product.photo.data = fs.readFileSync(files.photo.path);
-            product.photo.contentType = files.photo.type;
+            product.image.data = fs.readFileSync(files.image.path);
+            product.image.contentType = files.image.type;
         }
 
         try {
@@ -139,7 +139,7 @@ exports.list = async (req, res) => {
         const limit = req.query.limit ? parseInt(req.query.limit) : 1;
 
         const products = await Product.find()
-            .select('-photo')
+            .select('-image')
             .populate('category')
             .sort([[sortBy, order]])
             .limit(limit)
@@ -209,7 +209,7 @@ exports.listBySearch = async (req, res) => {
         }
 
         const data = await Product.find(findArgs)
-            .select('-photo')
+            .select('-image')
             .populate('category')
             .sort([[sortBy, order]])
             .skip(skip)
@@ -223,10 +223,10 @@ exports.listBySearch = async (req, res) => {
 };
 
 
-exports.photo = (req, res, next) => {
-    if (req.product.photo.data) {
-        res.set('Content-Type', req.product.photo.contentType);
-        return res.send(req.product.photo.data);
+exports.image = (req, res, next) => {
+    if (req.product.image.data) {
+        res.set('Content-Type', req.product.image.contentType);
+        return res.send(req.product.image.data);
     }
     next();
 };
@@ -241,7 +241,7 @@ exports.listSearch = async (req, res) => {
         }
 
         try {
-            const products = await Product.find(query).select('-photo').exec();
+            const products = await Product.find(query).select('-image').exec();
             res.json(products);
         } catch (err) {
             res.status(400).json({ error: errorHandler(err) });
