@@ -107,6 +107,7 @@ const Product = () => {
                 <label className="text-muted">Category</label>
                 <select onChange={handleChange('category')} className="form-control">
                     <option>Please select</option>
+                    {/* Fetching and looping through categories */}
                     {categories &&
                         categories.map((c, i) => (
                             <option key={i} value={c._id}>
