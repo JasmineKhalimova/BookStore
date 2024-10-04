@@ -7,7 +7,7 @@ const Layout = ({
     children
 }) => (
     <div>
-        <div className="main-body">
+        <div className="main-body reusable-banner">
             <h2 className="page-title">{title}</h2>
             <p className="page-description">{description}</p>
         </div>
