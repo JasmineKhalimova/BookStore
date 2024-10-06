@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Filter = ({ categories, handleFilters }) => {
+const Checkbox = ({ categories, handleFilters }) => {
     const [checked, setCheked] = useState([]);
 
     const handleToggle = c => () => {
@@ -32,4 +32,4 @@ const Filter = ({ categories, handleFilters }) => {
     ));
 };
 
-export default Filter;
+export default Checkbox;

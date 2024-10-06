@@ -1,59 +1,86 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import Card from "./Card";
+// Functions to fetch categories and products from API
 import { getCategories, getFilteredProducts } from "./apiCore";
+// Component for price filtering using radio buttons
 import RadioBox from "./RadioBox";
+// Array of price ranges for filtering
 import { prices } from "./fixedPrices";
-import Checkbox from "./Checkbox.js";
+// Component for filtering by categories using checkboxes
+import Checkbox from "./Checkbox";
 
+// The main functional component for the shop page
 const Shop = () => {
+    // Setting up state variables using useState hook
     const [myFilters, setMyFilters] = useState({
+        // State to hold selected filters (categories and price range)
         filters: { category: [], price: [] }
     });
+    // State to store fetched categories
     const [categories, setCategories] = useState([]);
+    // State to handle any errors
     const [error, setError] = useState(false);
+    // Number of products to load per request (pagination)
     const [limit, setLimit] = useState(6);
+    // Number of products to skip (used for pagination)
     const [skip, setSkip] = useState(0);
+    // Total number of products returned by the API
     const [size, setSize] = useState(0);
+    // State to hold filtered products
     const [filteredResults, setFilteredResults] = useState([]);
 
+    // Function to fetch categories from the API and set them in the state
     const init = () => {
         getCategories().then(data => {
             if (data.error) {
+                // If there's an error, update error state
                 setError(data.error);
             } else {
+                // Set categories if fetched successfully
                 setCategories(data);
             }
         });
     };
 
+    // Function to fetch filtered products based on selected filters
     const loadFilteredResults = newFilters => {
-        // console.log(newFilters);
+         // Fetch products with skip and limit for pagination and filters for category/price
         getFilteredProducts(skip, limit, newFilters).then(data => {
             if (data.error) {
+                // Handle error if API call fails
                 setError(data.error);
             } else {
+                // Set the filtered products in the state
                 setFilteredResults(data.data);
+                 // Update the total number of results
                 setSize(data.size);
+                // Reset the skip count after loading new filters
                 setSkip(0);
             }
         });
     };
 
+    // Function to load more products (for "Load more" button)
     const loadMore = () => {
+        // Increment skip by limit to fetch the next set of products
         let toSkip = skip + limit;
-        // console.log(newFilters);
         getFilteredProducts(toSkip, limit, myFilters.filters).then(data => {
             if (data.error) {
+                 // Handle error if API call fails
                 setError(data.error);
             } else {
+                // Append new products to existing results
                 setFilteredResults([...filteredResults, ...data.data]);
+                // Update total product count
                 setSize(data.size);
+                // Update skip to reflect the new pagination state
                 setSkip(toSkip);
             }
         });
     };
 
+        // Function to render "Load more" button if there are more products to display
     const loadMoreButton = () => {
         return (
             size > 0 &&
@@ -65,13 +92,15 @@ const Shop = () => {
         );
     };
 
+        // useEffect to initialize data and load initial products when the component mounts
     useEffect(() => {
-        init();
+        init(); // Fetch categories
+        // Load initial products
         loadFilteredResults(skip, limit, myFilters.filters);
-    }, []);
+    }, []); // Empty dependency array means this runs once on component mount
 
+    // Function to handle filter changes (category or price)
     const handleFilters = (filters, filterBy) => {
-        // console.log("SHOP", filters, filterBy);
         const newFilters = { ...myFilters };
         newFilters.filters[filterBy] = filters;
 
@@ -83,6 +112,7 @@ const Shop = () => {
         setMyFilters(newFilters);
     };
 
+        // Helper function to convert selected price option into actual price range
     const handlePrice = value => {
         const data = prices;
         let array = [];
@@ -106,7 +136,7 @@ const Shop = () => {
                     <h4>Filter by categories</h4>
                     <ul>
                         {/* Category Filter*/}
-                        <Checkbox.js
+                        <Checkbox
                             categories={categories}
                             handleFilters={filters =>
                                 handleFilters(filters, "category")
