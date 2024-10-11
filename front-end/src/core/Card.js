@@ -27,7 +27,6 @@ const Card = ({
     );
   };
   const addToCart = () => {
-    // console.log('added');
     addItem(product, setRedirect(true));
   };
 
