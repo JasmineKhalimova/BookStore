@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 // Import the signout function from the auth module
 import { signout, isAuthenticated } from "../auth";
 import { itemTotal } from "./cartHelpers";
+import Search from "./Search";
 
 const isActive = (history, path) => {
     if (history.location.pathname === path){
@@ -15,9 +16,9 @@ const isActive = (history, path) => {
 };
 
 const Menu = ({history}) => (
-    <div>
+    <div className="flex">
         <ul className='nav nav-tabs bg-primary'>
-            <li className="nav-item">
+            <li className="nav-item text-left">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/")}
@@ -27,7 +28,7 @@ const Menu = ({history}) => (
                 </Link>
             </li>
             
-            <li className="nav-item">
+            <li className="nav-item text-left">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/shop")}
@@ -36,8 +37,12 @@ const Menu = ({history}) => (
                     Shop
                 </Link>
             </li>
+        </ul>
 
-            <li className="nav-item">
+        <Search />
+
+        <ul className='nav nav-tabs bg-primary'>
+            <li className="nav-item text-right">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/cart")}
@@ -51,7 +56,7 @@ const Menu = ({history}) => (
             </li>
 
             {isAuthenticated() && isAuthenticated().user.role === 0 && (
-                <li className="nav-item">
+                <li className="nav-ite text-right">
                     <Link
                         className="nav-link"
                         style={isActive(history, "/user/dashboard")}
@@ -63,7 +68,7 @@ const Menu = ({history}) => (
             )}
 
             {isAuthenticated() && isAuthenticated().user.role === 1 && (
-                <li className="nav-item">
+                <li className="nav-item text-right">
                     <Link
                         className="nav-link"
                         style={isActive(history, "/admin/dashboard")}
@@ -76,7 +81,7 @@ const Menu = ({history}) => (
 
             {!isAuthenticated() && (
                 <Fragment>
-                    <li className="nav-item">
+                    <li className="nav-item text-right">
                         <Link
                             className="nav-link"
                             style={isActive(history, "/signin")}
@@ -99,7 +104,7 @@ const Menu = ({history}) => (
             )}
             
             {isAuthenticated() && (
-                <li className="nav-item">
+                <li className="nav-item text-right">
                     <span
                         className="nav-link"
                         style={{ cursor: "pointer", color: "#ffffff" }}
