@@ -18,7 +18,7 @@ const Search = () => {
             if (data.error) {
                 console.log(data.error);
             } else {
-                setData({ ...data, categories: data });
+                setData(prevState => ({ ...prevState, categories: data }));
             }
         });
     };
@@ -27,28 +27,39 @@ const Search = () => {
         loadCategories();
     }, []);
 
+    // Function to fetch search results based on current input
     const searchData = () => {
-        // console.log(search, category);
         if (search) {
             list({ search: search || undefined, category: category }).then(
                 response => {
                     if (response.error) {
                         console.log(response.error);
                     } else {
-                        setData({ ...data, results: response, searched: true });
+                        setData(prevState => ({
+                            ...prevState,
+                            results: response,
+                            searched: true
+                        }));
                     }
                 }
             );
+        } else {
+            // Clear search results when input is empty
+            setData(prevState => ({ ...prevState, results: [], searched: false }));
         }
     };
 
-    const searchSubmit = e => {
-        e.preventDefault();
-        searchData();
-    };
+    // Trigger search when the user types in the search box
+    useEffect(() => {
+        if (search.length > 0) {
+            searchData();
+        } else {
+            setData(prevState => ({ ...prevState, results: [], searched: false }));
+        }
+    }, [search]);
 
     const handleChange = name => event => {
-        setData({ ...data, [name]: event.target.value, searched: false });
+        setData(prevState => ({ ...prevState, [name]: event.target.value }));
     };
 
     const searchMessage = (searched, results) => {
@@ -69,8 +80,8 @@ const Search = () => {
 
                 <div className="row">
                     {results.map((product, i) => (
-                        <div className="col-4 mb-3">
-                            <Card key={i} product={product} />
+                        <div className="col-4 mb-3" key={i}>
+                            <Card product={product} />
                         </div>
                     ))}
                 </div>
@@ -79,7 +90,7 @@ const Search = () => {
     };
 
     const searchForm = () => (
-        <form onSubmit={searchSubmit}>
+        <form>
             <span className="input-group-text">
                 <div className="input-group input-group-lg">
                     <div className="input-group-prepend">
@@ -101,22 +112,17 @@ const Search = () => {
                         className="form-control"
                         onChange={handleChange("search")}
                         placeholder="Search by name"
+                        value={search}
                     />
-                </div>
-                <div
-                    className="btn input-group-append"
-                    style={{ border: "none" }}
-                >
-                    <button className="input-group-text">Search</button>
                 </div>
             </span>
         </form>
     );
 
     return (
-        <div className="row">
+        <div className="row position-relative">
             <div className="container mb-3">{searchForm()}</div>
-            <div className="container-fluid mb-3">
+            <div className="container-fluid mb-3 position-absolute">
                 {searchedProducts(results)}
             </div>
         </div>
