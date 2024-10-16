@@ -16,9 +16,9 @@ const isActive = (history, path) => {
 };
 
 const Menu = ({history}) => (
-    <div className="flex">
-        <ul className='nav nav-tabs bg-primary'>
-            <li className="nav-item text-left">
+    <div className="menu">
+        <ul className='nav nav-tabs'>
+            <li className="nav-item">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/")}
@@ -28,7 +28,7 @@ const Menu = ({history}) => (
                 </Link>
             </li>
             
-            <li className="nav-item text-left">
+            <li className="nav-item">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/shop")}
@@ -41,8 +41,8 @@ const Menu = ({history}) => (
 
         <Search />
 
-        <ul className='nav nav-tabs bg-primary'>
-            <li className="nav-item text-right">
+        <ul className='nav nav-tabs'>
+            <li className="nav-item">
                 <Link
                     className="nav-link"
                     style={isActive(history, "/cart")}
@@ -56,7 +56,7 @@ const Menu = ({history}) => (
             </li>
 
             {isAuthenticated() && isAuthenticated().user.role === 0 && (
-                <li className="nav-ite text-right">
+                <li className="nav-ite">
                     <Link
                         className="nav-link"
                         style={isActive(history, "/user/dashboard")}
@@ -68,7 +68,7 @@ const Menu = ({history}) => (
             )}
 
             {isAuthenticated() && isAuthenticated().user.role === 1 && (
-                <li className="nav-item text-right">
+                <li className="nav-item">
                     <Link
                         className="nav-link"
                         style={isActive(history, "/admin/dashboard")}
@@ -81,7 +81,7 @@ const Menu = ({history}) => (
 
             {!isAuthenticated() && (
                 <Fragment>
-                    <li className="nav-item text-right">
+                    <li className="nav-item">
                         <Link
                             className="nav-link"
                             style={isActive(history, "/signin")}
@@ -104,7 +104,7 @@ const Menu = ({history}) => (
             )}
             
             {isAuthenticated() && (
-                <li className="nav-item text-right">
+                <li className="nav-item">
                     <span
                         className="nav-link"
                         style={{ cursor: "pointer", color: "#ffffff" }}

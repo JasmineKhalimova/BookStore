@@ -1,3 +1,29 @@
+.menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    background: #693210;
+    color: white;
+    padding-top: 1rem;
+}
+
+.search-category{
+    max-width: 120px;
+}
+
+.search-input{
+    width: 270px;
+}
+
+.active-search{
+    background: white;
+    padding: 1rem;
+    z-index: 100;
+    position: absolute;
+    top: 3.2rem;
+    color: black;
+}
+
 /**
   * reusable-banner animation
   */
