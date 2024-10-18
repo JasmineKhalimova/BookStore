@@ -21,7 +21,7 @@ const Card = ({
     return (
       showViewProductButton && (
         <Link to={`/product/${product._id}`} className="mr-2">
-          <button className="btn btn-outline-primary mt-2 mb-2 card-btn-1">View Product</button>
+          <button className="btn btn-outline-primary mt-2 mb-2 card-btn-1 view-product btn-secondary">View Product</button>
         </Link>
       )
     );
@@ -39,7 +39,7 @@ const Card = ({
   const showAddToCartBtn = showAddToCartButton => {
     return (
       showAddToCartButton && (
-        <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 card-btn-1  ">
+        <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 card-btn-1 add-to-cart btn-primary">
           Add to cart
         </button>
       )
@@ -97,20 +97,22 @@ const Card = ({
       <div className="card-body">
         {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
-        <p className="card-p  mt-2">{product.description.substring(0, 100)} </p>
-        <p className="card-p black-10">€ {product.price}</p>
-        <p className="black-9">Category: {product.category && product.category.name}</p>
-        <p className="black-8">Added on {moment(product.createdAt).fromNow()}</p>
+        <p className="card-p text-capitalize mb-1">{product.description.substring(0, 100)} </p>
+        <p className="card-p black-10 mb-1">€ {product.price}</p>
+        <p className="black-9 mb-1">Category: {product.category && product.category.name}</p>
+        <p className="black-8 mb-1">Added on {moment(product.createdAt).fromNow()}</p>
         {showStock(product.quantity)}
         <br />
 
-        {showViewButton(showViewProductButton)}
+        <div className='d-flex justify-content-between'>
+          {showViewButton(showViewProductButton)}
 
-        {showAddToCartBtn(showAddToCartButton)}
+          {showAddToCartBtn(showAddToCartButton)}
 
-        {showRemoveButton(showRemoveProductButton)}
+          {showRemoveButton(showRemoveProductButton)}
 
-        {showCartUpdateOptions(cartUpdate)}
+          {showCartUpdateOptions(cartUpdate)}
+        </div>
       </div>
     </div>
   );

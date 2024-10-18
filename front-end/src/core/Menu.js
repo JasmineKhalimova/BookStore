@@ -9,7 +9,7 @@ import Search from "./Search";
 
 const isActive = (history, path) => {
     if (history.location.pathname === path){
-        return {color: '#ff9900'};
+        return {color: '#E2D8A7'};
     } else {
         return {color: '#ffffff'};
     }
@@ -17,7 +17,7 @@ const isActive = (history, path) => {
 
 const Menu = ({history}) => (
     <div className="menu">
-        <ul className='nav nav-tabs'>
+        <ul className='nav nav-tabs text-uppercase font-weight-bold fw-bold'>
             <li className="nav-item">
                 <Link
                     className="nav-link"
@@ -41,7 +41,7 @@ const Menu = ({history}) => (
 
         <Search />
 
-        <ul className='nav nav-tabs'>
+        <ul className='nav nav-tabs text-uppercase font-weight-bold fw-bold'>
             <li className="nav-item">
                 <Link
                     className="nav-link"

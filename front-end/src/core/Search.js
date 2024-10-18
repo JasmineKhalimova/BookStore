@@ -80,7 +80,7 @@ const Search = () => {
     
                 <div className="row">
                     {results.map((product, i) => (
-                        <div className="col-4 mb-3" key={i}>
+                        <div className="col-4 mb-3 search-products" key={i}>
                             <Card product={product} />
                         </div>
                     ))}
@@ -120,8 +120,8 @@ const Search = () => {
     );
 
     return (
-        <div className="row position-relative">
-            <div className="container mb-3">{searchForm()}</div>
+        <div className="row position-relative search">
+            <div className="container mb-3 mt-3">{searchForm()}</div>
             <div className={search.length > 0 ? "active-search" : ""}>
                 {searchedProducts(results)}
             </div>
