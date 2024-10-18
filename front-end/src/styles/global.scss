@@ -47,39 +47,34 @@ body{
   * Header changes
   */
 .menu{
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
     background: #A26B56;
     color: white;
     padding-top: 1rem;
-}
 
-.search{
-    .search-category{
-        max-width: 120px;
-    }
-    
-    .search-input{
-        width: 270px;
-    }
-    
-    .active-search{
-        background: white;
-        padding: 1rem;
-        z-index: 100;
-        position: absolute;
-        top: 3.2rem;
-        color: black;
-        border: 1px solid #CCC;
-    }
-    .search-products{
-        font-size: 14px;
-        .add-to-cart{
-            display: none;
-        }
-        .view-product{
-            font-size: 14px;
+    .menu-inner{
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+
+        .search{           
+            .active-search{
+                background: white;
+                padding: 1rem;
+                z-index: 100;
+                position: absolute;
+                top: 4rem;
+                color: black;
+                border: 1px solid #CCC;
+            }
+            .search-products{
+                font-size: 14px;
+                .add-to-cart{
+                    display: none;
+                }
+                .view-product{
+                    font-size: 14px;
+                }
+            }
         }
     }
 }
@@ -106,6 +101,19 @@ body{
             line-height: 2rem;
             margin: 0;
         }
+    }
+}
+
+/**
+  * Footer
+  */
+.footer{
+    background-color: #D4C59E;
+    color: #577D8A;
+
+    ul{
+        list-style: none;
+        padding-left: 0;
     }
 }
 
@@ -163,7 +171,7 @@ body{
 @media (max-width: 500px) { }
 
 // Small devices
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .homepageBanner{
         .banner-content{
             top: 25%;
@@ -181,26 +189,21 @@ body{
     }
 
     .menu{
-        flex-wrap: wrap;
-        justify-content: center;
-
-        .nav{
-            font-size: 14px;
-
-            .nav-link{
-                padding: 0.5rem;
+        .menu-inner{
+            flex-wrap: wrap;
+            justify-content: center;
+    
+            .nav{
+                font-size: 14px;
+    
+                .nav-link{
+                    padding: 0.5rem;
+                }
             }
-        }
-
-        .search{
-            order: 3;
-            width: 100%;
-
-            .search-input{
-                width: 250px;
-            }
-            .search-category{
-                max-width: 80px;
+    
+            .search{
+                order: 3;
+                width: 100%;
             }
         }
     }

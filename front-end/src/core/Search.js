@@ -92,10 +92,10 @@ const Search = () => {
     const searchForm = () => (
         <form>
             <span>
-                <div className="input-group input-group-lg p-2 rounded-pill bg-white">
-                    <div className="input-group-prepend">
+                <div className="input-group input-group-lg rounded-pill bg-white py-2 px-4">
+                    <div className="input-group-prepend w-25 pr-1">
                         <select
-                            className="btn text-black search-category"
+                            className="btn text-black search-category w-100"
                             onChange={handleChange("category")}
                         >
                             <option value="All">All</option>
@@ -109,9 +109,9 @@ const Search = () => {
 
                     <input
                         type="search"
-                        className="bg-white border search-input"
+                        className="bg-white border search-input w-75"
                         onChange={handleChange("search")}
-                        placeholder="Search by name"
+                        placeholder="Search for product"
                         value={search}
                     />
                 </div>

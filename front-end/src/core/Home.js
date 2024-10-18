@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getProducts } from './apiCore';
 import Card from './Card';
 import Banner from '../assets/banner.jpg'; 
-import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 const Home = () => {
     const [productsBySell, setProductsBySell] = useState([]);
@@ -23,7 +23,6 @@ const Home = () => {
     // New arrivals
     const loadProductsByArrival = () => {
         getProducts('createdAt').then(data => {
-            console.log(data);
             if (data.error) {
                 setError(data.error);
             } else {
@@ -65,45 +64,7 @@ const Home = () => {
                     ))}
                 </div>
             </div>
-            <div className='footer'>
-                <ul className='text-uppercase fw-bold'>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/" >
-                            Home
-                        </Link>
-                    </li>
-                    
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/shop">
-                            Shop
-                        </Link>
-                    </li>
-                </ul>
-                <ul className='text-uppercase fw-bold'> 
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/signin">
-                            Signin
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/signup">
-                            Signup
-                        </Link>
-                    </li>
-                </ul>
-                <ul className='text-uppercase fw-bold'>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/signup">
-                            Contact
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/signup">
-                            About
-                        </Link>
-                    </li> 
-                </ul>
-            </div>
+            <Footer />
         </div>
      );
 };

@@ -81,8 +81,6 @@ exports.remove = async (req, res) => {
         });
 
     } catch (err) {
-        // Log error and respond with error handler
-        console.error('Error deleting category:', err);
         res.status(400).json({
             error: errorHandler(err)
         });
