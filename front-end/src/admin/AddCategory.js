@@ -40,7 +40,7 @@ const Category = () => {
 
     const newCategoryFom = () => (
         <form onSubmit={clickSubmit}>
-            <div className="form-group">
+            <div className="form-group my-2">
                 <label className="text-muted">Name</label>
                 <input
                     type="text"

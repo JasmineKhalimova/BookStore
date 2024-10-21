@@ -43,6 +43,10 @@ body{
      }
 }
 
+input{
+    margin-bottom: 1rem;
+}
+
 /**
   * Header changes
   */
@@ -84,7 +88,7 @@ body{
   */
 .homepageBanner{
     .banner-content{
-        top: 50%;
+        top: 45%;
         left: 2%;
         background: #E2D8A7;
         padding: 1rem;
@@ -121,6 +125,7 @@ body{
   * Reusable-banner animation
   */
  .reusable-banner {
+    margin-bottom: 2rem;
      height: 180px;
      color: #fff;
      background: linear-gradient(-45deg, #A26B56, #E0A26F, #D4C59E, #E2D8A7);
