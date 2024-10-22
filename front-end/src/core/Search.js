@@ -109,7 +109,7 @@ const Search = () => {
 
                     <input
                         type="search"
-                        className="bg-white border search-input w-75"
+                        className="bg-white border search-input w-75 mb-0"
                         onChange={handleChange("search")}
                         placeholder="Search for product"
                         value={search}

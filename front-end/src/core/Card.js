@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import ShowImage from './ShowImage';
-import moment from 'moment';
 import { addItem, updateItem, removeItem } from './cartHelpers';
 
 const Card = ({
@@ -93,14 +92,13 @@ const Card = ({
   };
   return (
     <div className="card ">
-      <div className="card-header card-header-1 ">{product.name}</div>
-      <div className="card-body">
+      <div className="card-body product">
         {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
-        <p className="card-p text-capitalize mb-1">{product.description.substring(0, 100)} </p>
-        <p className="card-p black-10 mb-1">€ {product.price}</p>
-        <p className="black-9 mb-1">Category: {product.category && product.category.name}</p>
-        <p className="black-8 mb-1">Added on {moment(product.createdAt).fromNow()}</p>
+        <div className="card-header-1 fw-bold text-capitalize mb-2">{product.name}</div>
+        <p className="card-p mb-1 small-font">{product.description.substring(0, 80)}... </p>
+        <p className="black-9 mb-1 fw-semibold small-font">Category: {product.category && product.category.name}</p>
+        <p className="card-p black-10 mb-1 fs-4 fw-bold text-end">€ {product.price}</p>
         {showStock(product.quantity)}
         <br />
 

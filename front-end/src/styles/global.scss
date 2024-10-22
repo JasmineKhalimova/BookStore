@@ -43,8 +43,21 @@ body{
      }
 }
 
+.card-header-1{
+    min-height: 50px;
+}
+
 input{
     margin-bottom: 1rem;
+}
+
+img{
+    max-width: 100%;
+    width: 100%;
+}
+
+.small-font{
+    font-size: 15px;
 }
 
 /**
@@ -104,6 +117,17 @@ input{
             font-weight: 500;
             line-height: 2rem;
             margin: 0;
+        }
+    }
+}
+
+/**
+  * Product 
+  */
+  .product{
+    .product-img{
+        img{
+            max-height: 420px!important;
         }
     }
 }
@@ -173,7 +197,12 @@ input{
  }
 
  // X-Small devices
-@media (max-width: 500px) { }
+@media (max-width: 500px) {
+    .btn-primary,
+    .btn-secondary{
+        width: 100%;
+    }
+ }
 
 // Small devices
 @media (max-width: 991px) {
