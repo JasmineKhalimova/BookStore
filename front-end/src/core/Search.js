@@ -74,28 +74,28 @@ const Search = () => {
     const searchedProducts = (results = []) => {
         return (
             <div>
-                <h2 className="mt-4 mb-4">
+                <h5 className="mt-2 mb-2 border-b">
                     {searchMessage(searched, results)}
-                </h2>
-
+                </h5>
+    
                 <div className="row">
                     {results.map((product, i) => (
-                        <div className="col-4 mb-3" key={i}>
+                        <div className="col-4 mb-3 search-products" key={i}>
                             <Card product={product} />
                         </div>
                     ))}
                 </div>
             </div>
         );
-    };
+    };    
 
     const searchForm = () => (
         <form>
-            <span className="input-group-text">
-                <div className="input-group input-group-lg">
-                    <div className="input-group-prepend">
+            <span>
+                <div className="input-group input-group-lg rounded-pill bg-white py-2 px-4">
+                    <div className="input-group-prepend w-25 pr-1">
                         <select
-                            className="btn mr-2"
+                            className="btn text-black search-category w-100"
                             onChange={handleChange("category")}
                         >
                             <option value="All">All</option>
@@ -109,9 +109,9 @@ const Search = () => {
 
                     <input
                         type="search"
-                        className="form-control"
+                        className="bg-white border search-input w-75 mb-0"
                         onChange={handleChange("search")}
-                        placeholder="Search by name"
+                        placeholder="Search for product"
                         value={search}
                     />
                 </div>
@@ -120,9 +120,9 @@ const Search = () => {
     );
 
     return (
-        <div className="row position-relative">
-            <div className="container mb-3">{searchForm()}</div>
-            <div className="container-fluid mb-3 position-absolute">
+        <div className="row position-relative search">
+            <div className="container mb-3 mt-3">{searchForm()}</div>
+            <div className={search.length > 0 ? "active-search" : ""}>
                 {searchedProducts(results)}
             </div>
         </div>

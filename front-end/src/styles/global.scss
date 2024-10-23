@@ -1,15 +1,178 @@
 /**
-  * reusable-banner animation
+  * Global style
   */
- 
+body{
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    line-height: 1.5rem;
+    overflow-x: hidden;
+}
+
+#root{
+    overflow-x: hidden;
+}
+
+.card-header{
+    text-transform: capitalize;
+}
+
+.btn-primary{
+    border: 1px solid #A26B56;
+    color: #A26B56;
+    background: white;
+    text-transform: capitalize;
+
+    &:hover{
+       background: #A26B56; 
+       color: #fff;
+       border: 1px solid #A26B56;
+    }
+}
+
+.btn-secondary{
+    border: 1px solid #719F9D;
+    color: #719F9D;
+    background: white;
+    text-transform: capitalize;
+
+    &:hover{
+        background: #719F9D; 
+        color: #fff;
+        border: 1px solid #719F9D;
+     }
+}
+
+.card-header-1{
+    min-height: 50px;
+}
+
+input{
+    margin-bottom: 1rem;
+}
+
+img{
+    max-width: 100%;
+}
+
+.small-font{
+    font-size: 15px;
+}
+
+/**
+  * Header changes
+  */
+.menu{
+    background: #A26B56;
+    color: white;
+    padding-top: 1rem;
+
+    .menu-inner{
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+
+        .search{           
+            .active-search{
+                background: white;
+                padding: 1rem;
+                z-index: 100;
+                position: absolute;
+                top: 4rem;
+                color: black;
+                border: 1px solid #CCC;
+            }
+            .search-products{
+                font-size: 14px;
+                .add-to-cart{
+                    display: none;
+                }
+                .view-product{
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+/**
+  * Homepage 
+  */
+.homepageBanner{
+    .banner-content{
+        top: 45%;
+        left: 2%;
+        background: #E2D8A7;
+        padding: 1rem;
+        color: #577D8A;
+
+        span{
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 2rem;
+        }
+        p{
+            font-size: 25px;
+            font-weight: 500;
+            line-height: 2rem;
+            margin: 0;
+        }
+    }
+}
+
+/**
+  * Product 
+  */
+.product{
+    .product-img{
+        img{
+            width: 100%;
+            max-height: 420px!important;
+            min-height: 420px!important;
+        }
+    }
+}
+
+.single-product{
+    .product-img{
+        img{
+            width: 100%;
+            max-height: 555px!important;
+        }
+    }
+}
+
+/**
+  * Footer
+  */
+.footer{
+    background-color: #A26B56;
+    color: #fff;
+
+    ul{
+        list-style: none;
+        padding-left: 0;
+    }
+    .copyRight{
+        a{
+            color: wheat;
+        }
+    }
+}
+
+/**
+  * Reusable-banner animation
+  */
  .reusable-banner {
+    margin-bottom: 2rem;
      height: 180px;
      color: #fff;
-     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+     background: linear-gradient(-45deg, #A26B56, #E0A26F, #D4C59E, #E2D8A7);
      background-size: 400% 400%;
      -webkit-animation: Gradient 15s ease infinite;
      -moz-animation: Gradient 15s ease infinite;
      animation: Gradient 15s ease infinite;
+     padding: 2rem;
  }
  
  @-webkit-keyframes Gradient {
@@ -47,3 +210,53 @@
          background-position: 0% 50%;
      }
  }
+
+ // X-Small devices
+@media (max-width: 500px) {
+    .btn-primary,
+    .btn-secondary{
+        width: 100%;
+    }
+ }
+
+// Small devices
+@media (max-width: 991px) {
+    .homepageBanner{
+        .banner-content{
+            top: 25%;
+            span{
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 1rem;
+            }
+            p{
+                font-size: 17px;
+                font-weight: 500;
+                line-height: 1rem;
+            }
+        }
+    }
+
+    .menu{
+        .menu-inner{
+            flex-wrap: wrap;
+            justify-content: center;
+    
+            .nav{
+                font-size: 14px;
+    
+                .nav-link{
+                    padding: 0.5rem;
+                }
+            }
+    
+            .search{
+                order: 3;
+                width: 100%;
+            }
+        }
+    }
+ }
+
+// Large devices
+@media (max-width: 1024px) {  }

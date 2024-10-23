@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import ShowImage from './ShowImage';
-import moment from 'moment';
 import { addItem, updateItem, removeItem } from './cartHelpers';
 
 const Card = ({
@@ -21,7 +20,7 @@ const Card = ({
     return (
       showViewProductButton && (
         <Link to={`/product/${product._id}`} className="mr-2">
-          <button className="btn btn-outline-primary mt-2 mb-2 card-btn-1">View Product</button>
+          <button className="btn btn-outline-primary mt-2 mb-2 card-btn-1 view-product btn-secondary">View Product</button>
         </Link>
       )
     );
@@ -39,7 +38,7 @@ const Card = ({
   const showAddToCartBtn = showAddToCartButton => {
     return (
       showAddToCartButton && (
-        <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 card-btn-1  ">
+        <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 card-btn-1 add-to-cart btn-primary">
           Add to cart
         </button>
       )
@@ -93,24 +92,25 @@ const Card = ({
   };
   return (
     <div className="card ">
-      <div className="card-header card-header-1 ">{product.name}</div>
-      <div className="card-body">
+      <div className="card-body product">
         {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
-        <p className="card-p  mt-2">{product.description.substring(0, 100)} </p>
-        <p className="card-p black-10">€ {product.price}</p>
-        <p className="black-9">Category: {product.category && product.category.name}</p>
-        <p className="black-8">Added on {moment(product.createdAt).fromNow()}</p>
+        <div className="card-header-1 fw-bold text-capitalize mb-2">{product.name}</div>
+        <p className="card-p mb-1 small-font">{product.description.substring(0, 80)}... </p>
+        <p className="black-9 mb-1 fw-semibold small-font">Category: {product.category && product.category.name}</p>
+        <p className="card-p black-10 mb-1 fs-4 fw-bold text-end">€ {product.price}</p>
         {showStock(product.quantity)}
         <br />
 
-        {showViewButton(showViewProductButton)}
+        <div className='d-flex justify-content-between'>
+          {showViewButton(showViewProductButton)}
 
-        {showAddToCartBtn(showAddToCartButton)}
+          {showAddToCartBtn(showAddToCartButton)}
 
-        {showRemoveButton(showRemoveProductButton)}
+          {showRemoveButton(showRemoveProductButton)}
 
-        {showCartUpdateOptions(cartUpdate)}
+          {showCartUpdateOptions(cartUpdate)}
+        </div>
       </div>
     </div>
   );
