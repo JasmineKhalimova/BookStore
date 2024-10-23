@@ -6,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { signout, isAuthenticated } from "../auth";
 import { itemTotal } from "./cartHelpers";
 import Search from "./Search";
+import Logo from '../assets/logo.png';
 
 const isActive = (history, path) => {
     if (history.location.pathname === path){
@@ -18,6 +19,10 @@ const isActive = (history, path) => {
 const Menu = ({history}) => (
     <div className="menu">
         <div className="container menu-inner">
+            <img src={Logo} alt="Homepage banner"  width='96' height='89' />
+
+            <Search />
+
             <ul className='nav nav-tabs text-uppercase font-weight-bold fw-bold'>
                 <li className="nav-item">
                     <Link
@@ -38,11 +43,6 @@ const Menu = ({history}) => (
                         Shop
                     </Link>
                 </li>
-            </ul>
-
-            <Search />
-
-            <ul className='nav nav-tabs text-uppercase font-weight-bold fw-bold'>
                 <li className="nav-item">
                     <Link
                         className="nav-link"

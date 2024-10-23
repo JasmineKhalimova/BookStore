@@ -39,13 +39,13 @@ const ShopCard = ({
 
   return (
     <div className="card ">
-      <div className="card-body d-flex justify-content-around product">
+      <div className="card-body d-flex justify-content-around single-product">
         {shouldRedirect(redirect)}
         <div className='col-5'>
             <ShowImage item={product} url="product" />
         </div>
         <div className='col-5'>
-            <div className="card-header-1 fw-bold text-capitalize mb-2">{product.name}</div>
+            <div className="fw-bold text-capitalize mb-2 fs-3">{product.name}</div>
             <p className="card-p black-10 mb-1 fs-4 fw-bold text-end">€ {product.price}</p>
             <p className="card-p mb-1 small-font">{product.description} </p>
             <p className="black-9 mb-1 fw-semibold small-font">Category: {product.category && product.category.name}</p>
