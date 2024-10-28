@@ -120,19 +120,6 @@ img{
     }
 }
 
-/**
-  * Product 
-  */
-.product{
-    .product-img{
-        img{
-            width: 100%;
-            max-height: 420px!important;
-            min-height: 420px!important;
-        }
-    }
-}
-
 .single-product{
     .product-img{
         img{
@@ -259,4 +246,17 @@ img{
  }
 
 // Large devices
-@media (max-width: 1024px) {  }
+@media (min-width: 992px) { 
+        /**
+    * Product 
+    */
+    .product{
+        .product-img{
+            img{
+                width: 100%;
+                max-height: 420px!important;
+                min-height: 420px!important;
+            }
+        }
+    }
+}

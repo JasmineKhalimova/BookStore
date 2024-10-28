@@ -102,7 +102,7 @@ const Card = ({
         {showStock(product.quantity)}
         <br />
 
-        <div className='d-flex justify-content-between'>
+        <div className='d-md-flex justify-content-between'>
           {showViewButton(showViewProductButton)}
 
           {showAddToCartBtn(showAddToCartButton)}

@@ -19,7 +19,9 @@ const isActive = (history, path) => {
 const Menu = ({history}) => (
     <div className="menu">
         <div className="container menu-inner">
-            <img src={Logo} alt="Homepage banner"  width='96' height='89' />
+            <Link to="/" className="pb-2">
+                <img src={Logo} alt="Homepage banner"  width='96' height='89' />
+            </Link>
 
             <Search />
 
