@@ -51,6 +51,11 @@ input{
     margin-bottom: 1rem;
 }
 
+textarea:focus, 
+input:focus{
+    outline: none;
+}
+
 img{
     max-width: 100%;
 }
@@ -72,7 +77,8 @@ img{
         justify-content: space-between;
         align-items: end;
 
-        .search{           
+        .search{    
+            width: 560px;       
             .active-search{
                 background: white;
                 padding: 1rem;
@@ -90,6 +96,20 @@ img{
                 .view-product{
                     font-size: 14px;
                 }
+
+                .product-img {
+                    img{
+                        max-height: 200px !important;
+                        min-height: 150px !important;
+                    }
+                }
+                .card-p{
+                    display: none;
+                }
+                .card-header-1,
+                .category{
+                    font-size: 13px;
+                }
             }
         }
     }
@@ -104,7 +124,7 @@ img{
         left: 2%;
         background: #E2D8A7;
         padding: 1rem;
-        color: #577D8A;
+        color: #4B3117;
 
         span{
             font-size: 32px;
