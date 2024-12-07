@@ -43,7 +43,6 @@ exports.signin = async (req, res) => {
 
         return res.json({ token, user: { _id, name, userEmail, role } });
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Layout from './Layout';
 import { getProducts } from './apiCore';
 import Card from './Card';
-import Search from './Search';
+import Banner from '../assets/banner.jpg'; 
+import Footer from './Footer';
 
 const Home = () => {
     const [productsBySell, setProductsBySell] = useState([]);
@@ -23,7 +23,6 @@ const Home = () => {
     // New arrivals
     const loadProductsByArrival = () => {
         getProducts('createdAt').then(data => {
-            console.log(data);
             if (data.error) {
                 setError(data.error);
             } else {
@@ -39,29 +38,34 @@ const Home = () => {
     }, []); // Empty dependency array means this effect runs once after the initial render
 
      return (
-        <Layout
-            title="FullStack React Node MongoDB Ecommerce App"
-            description="Node React E-commerce App"
-            className="container-fluid"
-        >
-            <h2 className="mb-4">New Arrivals</h2>
-            <div className="row">
-                {productsByArrival.map((product, i) => (
-                    <div key={i} className="col-4 mb-3">
-                        <Card product={product} />
-                    </div>
-                ))}
+        <div>
+            <div className='homepageBanner position-relative'>
+                <img src={Banner} alt="Homepage banner" className='w-100'/>
+                <div className='banner-content position-absolute'>
+                    <span>Welcome To Nook Book</span>
+                    <p>Vintage Bookstore</p>
+                </div>
             </div>
-
-            <h2 className="mb-4">Best Sellers</h2>
-            <div className="row">
-                {productsBySell.map((product, i) => (
-                    <div key={i} className="col-4 mb-3">
-                        <Card product={product} />
-                    </div>
-                ))}
+            <div className='container mt-4 mb-4'>
+                <h2 className="mb-4 mt-4 border-bottom pt-4 pb-1">New Arrivals</h2>
+                <div className="row product">
+                    {productsByArrival.map((product, i) => (
+                        <div key={i} className="col-md-3 col-6 mb-3">
+                            <Card product={product} />
+                        </div>
+                    ))}
+                </div>
+                <h2 className="mt-4 mb-4 border-bottom pt-4 pb-1">Best Sellers</h2>
+                <div className="row product">
+                    {productsBySell.map((product, i) => (
+                        <div key={i} className="col-md-3 col-6 mb-3">
+                            <Card product={product} />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </Layout>
+            <Footer />
+        </div>
      );
 };
 

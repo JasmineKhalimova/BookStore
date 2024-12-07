@@ -67,41 +67,53 @@ exports.update = async (req, res) => {
     }
 };
 
-exports.addOrderToUserHistory = (req, res, next) => {
-    let history = [];
+exports.addOrderToUserHistory = async (req, res, next) => {
+    try {
+        let history = [];
 
-    req.body.order.products.forEach(item => {
-        history.push({
-            _id: item._id,
-            name: item.name,
-            description: item.description,
-            category: item.category,
-            quantity: item.count,
-            transaction_id: req.body.order.transaction_id,
-            amount: req.body.order.amount
+        req.body.order.products.forEach(item => {
+            history.push({
+                _id: item._id,
+                name: item.name,
+                description: item.description,
+                category: item.category,
+                quantity: item.count,
+                transaction_id: req.body.order.transaction_id,
+                amount: req.body.order.amount
+            });
         });
-    });
 
-    User.findOneAndUpdate({ _id: req.profile._id }, { $push: { history: history } }, { new: true }, (error, data) => {
-        if (error) {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: req.profile._id },
+            { $push: { history: history } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
             return res.status(400).json({
                 error: 'Could not update user purchase history'
             });
         }
         next();
-    });
+    } catch (error) {
+        return res.status(400).json({
+            error: 'An error occurred while updating purchase history'
+        });
+    }
 };
 
-exports.purchaseHistory = (req, res) => {
-    Order.find({ user: req.profile._id })
-        .populate('user', '_id name')
-        .sort('-created')
-        .exec((err, orders) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
-            res.json(orders);
+
+exports.purchaseHistory = async (req, res) => {
+    try {
+        const orders = await Order.find({ user: req.profile._id })
+            .populate('user', '_id name')
+            .sort('-created')
+            .exec();
+
+        res.json(orders);
+    } catch (error) {
+        return res.status(400).json({
+            error: 'An error occurred while fetching purchase history'
         });
+    }
 };

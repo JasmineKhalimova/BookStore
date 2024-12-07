@@ -82,7 +82,7 @@ const Signup = () => {
                     type="password"
                     className="form-control"
                     value={password}
-                    minlength="7" 
+                    minLength="7" 
                     pattern="^(?=.*[a-zA-Z])(?=.*\d).+$" 
                 />
             </div>
